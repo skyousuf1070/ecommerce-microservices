@@ -1,0 +1,25 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: payment-service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        # Tells Kafka: when sending PaymentEvent, label it as 'paymentEvent'
+        spring.json.type.mapping: "paymentEvent:org.com.payment.event.PaymentEvent"
+    consumer:
+      group-id: payment-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        # Trusts the local package
+        spring.json.trusted.packages: "org.com.payment.event"
+        # Tells Kafka: when you see 'orderEvent', map it to our local OrderEvent class
+        spring.json.type.mapping: "orderEvent:org.com.payment.event.OrderEvent"
