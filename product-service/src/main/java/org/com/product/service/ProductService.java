@@ -22,7 +22,7 @@ public class ProductService {
         return repository.findAll();
     }
 
-    public Optional<Product> getProductById(Long id) {
+    public Optional<Product> getProductById(String id) {
         return repository.findById(id);
     }
 
@@ -30,7 +30,7 @@ public class ProductService {
         return repository.save(product);
     }
 
-    public void removeProduct(Long id) {
+    public void removeProduct(String id) {
         repository.deleteById(id);
     }
 }

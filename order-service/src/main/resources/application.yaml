@@ -28,16 +28,16 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         # Outgoing: Label the event as 'orderEvent'
-        spring.json.type.mapping: "orderEvent:org.com.ecommerce.event.OrderEvent"
+        spring.json.type.mapping: "orderEvent:org.com.order.event.OrderEvent"
     consumer:
       group-id: order-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "org.com.ecommerce.event"
+        spring.json.trusted.packages: "org.com.order.event"
         # Incoming: Map 'paymentEvent' nickname to our local PaymentEvent class
-        spring.json.type.mapping: "paymentEvent:org.com.ecommerce.event.PaymentEvent"
+        spring.json.type.mapping: "paymentEvent:org.com.order.event.PaymentEvent"
 
   sql:
     init:
