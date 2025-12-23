@@ -75,3 +75,15 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       - kafka
+
+  product-service:
+    build: ./product-service
+    container_name: product-service
+    ports:
+      - "8083:8083"
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PASSWORD=Yousuf@1070
+    depends_on:
+      mysql-db:
+        condition: service_healthy
