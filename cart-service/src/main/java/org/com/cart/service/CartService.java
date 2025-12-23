@@ -1,14 +1,20 @@
 package org.com.cart.service;
 
 import lombok.RequiredArgsConstructor;
+import org.com.cart.exception.InsufficientStockException;
+import org.com.cart.exception.ProductNotFoundException;
 import org.com.cart.model.Cart;
 import org.com.cart.model.CartItem;
+import org.com.cart.model.ProductDTO;
 import org.com.cart.model.ProductRequest;
 import org.com.cart.repository.CartRepository;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -16,9 +22,23 @@ import java.util.Optional;
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final org.springframework.web.reactive.function.client.WebClient.Builder webClientBuilder;
 
     @Transactional
     public Cart addToCart(String userId, ProductRequest request) {
+        ProductDTO product = webClientBuilder.build()
+                .get()
+                .uri("http://product-service:8083/api/products/{id}", request.getProductId())
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
+                        Mono.error(new ProductNotFoundException("Product ID " + request.getProductId() + " does not exist!")))
+                .bodyToMono(ProductDTO.class)
+                .block(); // Synchronous wait
+
+        if (Objects.requireNonNull(product).getStockQuantity() < request.getQuantity()) {
+            throw new InsufficientStockException("Insufficient stock! Available: " + product.getStockQuantity());
+        }
+
         // 1. Get existing cart or create a new one
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseGet(() -> Cart.builder()
@@ -32,21 +52,22 @@ public class CartService {
                 .findFirst();
 
         if (existingItem.isPresent()) {
-            // Update quantity if item exists
             CartItem item = existingItem.get();
+            // Check total quantity vs stock
+            if (product.getStockQuantity() < (item.getQuantity() + request.getQuantity())) {
+                throw new InsufficientStockException("Cannot add more. Total would exceed available stock!");
+            }
             item.setQuantity(item.getQuantity() + request.getQuantity());
         } else {
-            // Add new item if it doesn't exist
             CartItem newItem = CartItem.builder()
                     .productId(request.getProductId())
                     .quantity(request.getQuantity())
-                    .price(request.getPrice())
-                    .cart(cart) // Set the back-reference for JPA
+                    .price(product.getPrice())
+                    .cart(cart)
                     .build();
             cart.getItems().add(newItem);
         }
 
-        // 3. Save the cart (cascades to items)
         return cartRepository.save(cart);
     }
 
