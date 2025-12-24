@@ -90,3 +90,18 @@ services:
         condition: service_started
       mysql-db:
         condition: service_healthy
+
+  delivery-service:
+    build: ./delivery-service
+    container_name: delivery-service
+    ports:
+      - "8084:8084"
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PASSWORD=Yousuf@1070
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      kafka:
+        condition: service_started
+      mysql-db:
+        condition: service_healthy
