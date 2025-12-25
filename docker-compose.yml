@@ -106,3 +106,15 @@ services:
         condition: service_started
       mysql-db:
         condition: service_healthy
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "8085:8085"
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PASSWORD=Yousuf@1070
+    depends_on:
+      mysql-db:
+        condition: service_healthy
