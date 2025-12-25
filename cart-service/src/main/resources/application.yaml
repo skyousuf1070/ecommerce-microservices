@@ -5,7 +5,7 @@ spring:
   application:
     name: cart-service
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/ecommerce?createDatabaseIfNotExist=true
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/cart_db?createDatabaseIfNotExist=true
     username: root
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver

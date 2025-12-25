@@ -6,7 +6,7 @@ spring:
     name: delivery-service
 
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/ecommerce?createDatabaseIfNotExist=true
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/delivery_db?createDatabaseIfNotExist=true
     username: root
     password: ${DB_PASSWORD}
 
