@@ -1,4 +1,4 @@
-package org.com.delivery.client;
+package org.com.delivery.model;
 
 public class User {
     private String id;

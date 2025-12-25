@@ -31,3 +31,10 @@ logging:
   level:
     org.springframework.jdbc.core: DEBUG
     org.hibernate.SQL: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER:localhost}:8761/eureka/
+  instance:
+    prefer-ip-address: true

@@ -49,6 +49,9 @@ logging:
   level:
     org.springframework.jdbc.core: DEBUG
 
-cart:
-  service:
-    url: ${CART_SERVICE_URL:http://localhost:8081}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER:localhost}:8761/eureka/
+  instance:
+    prefer-ip-address: true

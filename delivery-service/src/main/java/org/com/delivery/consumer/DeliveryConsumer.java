@@ -1,8 +1,8 @@
 package org.com.delivery.consumer;
 
-import org.com.delivery.client.Product;
 import org.com.delivery.client.ProductClient;
-import org.com.delivery.client.User;
+import org.com.delivery.model.Product;
+import org.com.delivery.model.User;
 import org.com.delivery.client.UserClient;
 import org.com.delivery.event.OrderEvent;
 import org.com.delivery.event.OrderItemEvent;

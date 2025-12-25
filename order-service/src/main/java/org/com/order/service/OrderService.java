@@ -31,15 +31,12 @@ public class OrderService {
     private final WebClient.Builder webClientBuilder;
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
 
-    @Value("${cart.service.url:http://localhost:8081}")
-    private String cartServiceUrl;
-
     @Transactional
     public OrderResponse placeOrder(OrderRequest request) {
         // 1. Fetch Cart from Cart Service
         CartDTO cart = webClientBuilder.build()
                 .get()
-                .uri(cartServiceUrl + "/api/cart/{userId}", request.getUserId())
+                .uri("http://cart-service/api/cart/{userId}", request.getUserId())
                 .retrieve()
                 .bodyToMono(CartDTO.class)
                 .block();
@@ -107,7 +104,7 @@ public class OrderService {
     private void clearUserCart(String userId) {
         webClientBuilder.build()
                 .delete()
-                .uri(cartServiceUrl + "/api/cart/{userId}/clear", userId)
+                .uri("http://cart-service/api/cart/{userId}/clear", userId)
                 .retrieve()
                 .toBodilessEntity()
                 .subscribe(); // Non-blocking

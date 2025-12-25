@@ -28,7 +28,7 @@ public class CartService {
     public Cart addToCart(String userId, ProductRequest request) {
         ProductDTO product = webClientBuilder.build()
                 .get()
-                .uri("http://product-service:8083/api/products/{id}", request.getProductId())
+                .uri("http://product-service/api/products/{id}", request.getProductId())
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response ->
                         Mono.error(new ProductNotFoundException("Product ID " + request.getProductId() + " does not exist!")))
