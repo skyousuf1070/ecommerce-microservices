@@ -100,6 +100,7 @@ services:
       - DB_HOST=mysql-db
       - DB_PASSWORD=Yousuf@1070
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - MAIL_PASSWORD=vlubhgtnelrgkinh
     depends_on:
       kafka:
         condition: service_started

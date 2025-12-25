@@ -30,3 +30,12 @@ spring:
         spring.json.trusted.packages: "*"
         # This MUST match the 'orderEvent' nickname from Order Service
         spring.json.type.mapping: "orderEvent:org.com.delivery.event.OrderEvent"
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: skyousuf1070@gmail.com
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
