@@ -141,3 +141,14 @@ services:
         condition: service_healthy
       discovery-server:
         condition: service_started
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "9000:9000"
+    environment:
+      - DISCOVERY_SERVER=discovery-server
+    depends_on:
+      discovery-server:
+        condition: service_started
