@@ -11,26 +11,41 @@ spring:
           uri: lb://cart-service
           predicates:
             - Path=/api/cart/**
+          filters:
+            - AuthenticationFilter
 
         - id: delivery-service
           uri: lb://delivery-service
           predicates:
             - Path=/api/delivery/**
+          filters:
+            - AuthenticationFilter
 
         - id: order-service
           uri: lb://order-service
           predicates:
             - Path=/api/orders/**
+          filters:
+            - AuthenticationFilter
 
         - id: product-service
           uri: lb://product-service
           predicates:
             - Path=/api/products/**
+          filters:
+            - AuthenticationFilter
 
-        - id: user-service
+        - id: user-mgmt-service
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
+          filters:
+            - AuthenticationFilter
+
+        - id: user-auth-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/**
 
 eureka:
   client:
